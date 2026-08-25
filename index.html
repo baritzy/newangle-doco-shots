@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>רשימת שוטים לתעדוף</title>
+<style>
+:root{
+  --paper:#F2F4F1; --surface:#FFFFFF; --surface-2:#FAFBF9;
+  --ink:#141A18; --ink-2:#4B554F; --ink-3:#7C867F;
+  --line:#DDE1DB; --line-2:#EAEDE8;
+  --must:#1D5C58; --mid:#96610F; --skip:#68736C;
+  --must-bg:rgba(29,92,88,.075); --mid-bg:rgba(169,111,22,.085); --skip-bg:rgba(119,131,123,.07);
+  --shadow:0 1px 2px rgba(20,26,24,.05), 0 1px 8px rgba(20,26,24,.04);
+  --radius:10px;
+  --barH:120px;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI","Noto Sans Hebrew","Arial Hebrew",Arial,sans-serif;
+  --display:"New Peninim MT","Narkisim","Frank Ruehl CLM","Noto Serif Hebrew","Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#101413; --surface:#181E1B; --surface-2:#1C2320;
+    --ink:#E9ECE7; --ink-2:#A9B3AC; --ink-3:#87918A;
+    --line:#2A322D; --line-2:#232A26;
+    --must:#5CBDB5; --mid:#D9A441; --skip:#8E9891;
+    --must-bg:rgba(92,189,181,.10); --mid-bg:rgba(217,164,65,.11); --skip-bg:rgba(142,152,145,.09);
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;max-width:100%;overflow-x:hidden}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 96px}
+
+/* ---------- intro ---------- */
+.intro{padding:36px 0 20px}
+.eyebrow{font-size:12.5px;letter-spacing:.05em;color:var(--ink-3);margin:0 0 10px}
+h1{font-family:var(--display);font-size:clamp(28px,5vw,42px);line-height:1.15;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--ink-2);font-size:15px;margin:0 0 18px}
+.brief{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);max-width:62ch}
+.brief p{margin:0 0 8px;font-size:15px;color:var(--ink-2)}
+.brief p:last-child{margin:0}
+.brief strong{color:var(--ink);font-weight:600}
+.brief .auto{font-size:13.5px;color:var(--ink-3);border-top:1px solid var(--line-2);padding-top:8px;margin-top:10px}
+
+/* ---------- sticky bar ---------- */
+.bar{
+  position:sticky; top:0; z-index:60;
+  background:var(--paper);
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  margin:0 -16px; padding:8px 16px 9px;
+}
+.bar-in{max-width:928px;margin:0 auto;display:flex;flex-direction:column;gap:7px}
+.bar-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.count{font-size:13.5px;color:var(--ink-2);white-space:nowrap}
+.count b{font-family:var(--mono);font-size:15px;color:var(--ink);font-weight:600}
+.meter{display:flex;height:6px;border-radius:99px;overflow:hidden;background:var(--line-2);flex:1 1 120px;min-width:90px}
+.meter i{display:block;height:100%;transition:width .25s ease}
+.meter .m-must{background:var(--must)} .meter .m-mid{background:var(--mid)} .meter .m-skip{background:var(--skip)}
+.legend{display:flex;gap:12px;font-size:12.5px;color:var(--ink-2);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:2px;flex:none}
+.d-must{background:var(--must)} .d-mid{background:var(--mid)} .d-skip{background:var(--skip)}
+.saved{font-size:12.5px;color:var(--ink-3);white-space:nowrap;margin-inline-start:auto}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{
+  font:inherit;font-size:13px;line-height:1;padding:8px 11px;border-radius:99px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer;white-space:nowrap;
+}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.dl{
+  font:inherit;font-size:14px;font-weight:600;line-height:1;padding:11px 16px;border-radius:8px;
+  background:var(--must);color:#fff;border:1px solid transparent;cursor:pointer;white-space:nowrap;
+}
+@media (prefers-color-scheme: dark){ .dl{color:#0C1210} }
+.dl:hover{filter:brightness(1.08)}
+.dl.small{padding:8px 13px;font-size:13px}
+
+/* ---------- sections ---------- */
+section{margin:26px 0 0}
+.sec-h{
+  position:sticky; top:var(--barH); z-index:40;
+  background:var(--paper); padding:10px 0 8px; margin:0;
+  border-bottom:1px solid var(--line);
+  display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+}
+.sec-h h2{font-family:var(--display);font-size:20px;font-weight:600;margin:0;letter-spacing:.01em}
+.sec-h .span{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.02em}
+.sec-h .qty{font-size:12.5px;color:var(--ink-3);margin-inline-start:auto}
+.list{padding:10px 0 4px;display:flex;flex-direction:column;gap:8px}
+
+/* ---------- shot row ---------- */
+.shot{
+  background:var(--surface); border:1px solid var(--line);
+  border-inline-start:3px solid var(--line);
+  border-radius:var(--radius); box-shadow:var(--shadow);
+  display:grid; grid-template-columns:auto 1fr auto; gap:12px;
+  padding:10px 12px 10px 12px; align-items:start;
+  touch-action:manipulation;
+}
+.shot[data-p="must"]{border-inline-start-color:var(--must);background:var(--must-bg)}
+.shot[data-p="mid"]{border-inline-start-color:var(--mid);background:var(--mid-bg)}
+.shot[data-p="skip"]{border-inline-start-color:var(--skip);background:var(--skip-bg);opacity:.86}
+.id{display:flex;align-items:center;gap:8px;padding-top:2px}
+.grip{
+  width:26px;height:34px;flex:none;border:0;background:transparent;color:var(--ink-2);opacity:.65;
+  cursor:grab;touch-action:none;display:flex;align-items:center;justify-content:center;border-radius:6px;padding:0;
+}
+.grip:hover{background:var(--line-2);color:var(--ink);opacity:1}
+.grip:active{cursor:grabbing}
+.grip svg{pointer-events:none}
+.num{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink-2);min-width:2.4ch;text-align:center}
+.body{min-width:0}
+.tc{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.02em;margin:0 0 3px;unicode-bidi:isolate;text-align:start;overflow-wrap:anywhere}
+.tc[dir="ltr"]{text-align:right}
+.what{font-size:15.5px;line-height:1.45;margin:0;overflow-wrap:anywhere}
+.prod{font-size:13.5px;color:var(--ink-2);margin:5px 0 0;overflow-wrap:anywhere}
+.prod b{font-size:11px;color:var(--ink-3);font-weight:600;margin-inline-end:7px;padding:2px 6px;border-radius:4px;background:var(--line-2);white-space:nowrap}
+.kinds{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.kind{font-size:11.5px;line-height:1;padding:4px 7px;border-radius:4px;background:var(--line-2);color:var(--ink-2);white-space:nowrap}
+.rights{
+  display:flex;gap:7px;align-items:flex-start;margin-top:8px;padding:6px 9px;
+  border-radius:6px;background:var(--mid-bg);border:1px dashed color-mix(in srgb, var(--mid) 45%, transparent);
+  font-size:12.5px;color:var(--ink-2);
+}
+.rights b{color:var(--mid);font-weight:600;white-space:nowrap}
+.acts{display:flex;flex-direction:column;gap:6px;align-items:stretch;flex:none}
+.pset{display:flex;gap:4px}
+.p{
+  font:inherit;font-size:12.5px;line-height:1;padding:9px 10px;border-radius:7px;cursor:pointer;white-space:nowrap;
+  border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);
+}
+.p:hover{border-color:var(--ink-3);color:var(--ink)}
+.p[aria-pressed="true"]{color:#fff;border-color:transparent;font-weight:600}
+@media (prefers-color-scheme: dark){ .p[aria-pressed="true"]{color:#0C1210} }
+.p-must[aria-pressed="true"]{background:var(--must)}
+.p-mid[aria-pressed="true"]{background:var(--mid)}
+.p-skip[aria-pressed="true"]{background:var(--skip)}
+.noteBtn{
+  font:inherit;font-size:12.5px;line-height:1;padding:8px 10px;border-radius:7px;cursor:pointer;
+  border:1px dashed var(--line);background:transparent;color:var(--ink-3);text-align:center;
+}
+.noteBtn:hover{border-color:var(--ink-3);color:var(--ink-2)}
+.noteBtn[data-has="1"]{border-style:solid;border-color:var(--must);color:var(--must)}
+.noteWrap{grid-column:1 / -1;margin-top:2px}
+.noteWrap textarea{
+  width:100%;font:inherit;font-size:13.5px;line-height:1.45;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;
+  resize:vertical;min-height:56px;
+}
+.noteWrap textarea::placeholder{color:var(--ink-3)}
+.hidden{display:none !important}
+
+.placeholder{border:1px dashed var(--ink-3);border-radius:var(--radius);background:transparent;opacity:.5}
+.shot.dragging{box-shadow:0 12px 28px rgba(20,26,24,.18);opacity:.97;cursor:grabbing}
+.empty{padding:34px 4px;color:var(--ink-3);font-size:15px;text-align:center}
+
+/* ---------- footer ---------- */
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.foot .note{font-size:13px;color:var(--ink-3);max-width:46ch}
+.reset{
+  font:inherit;font-size:12.5px;padding:7px 11px;border-radius:7px;cursor:pointer;
+  background:transparent;border:1px solid var(--line);color:var(--ink-3);margin-inline-start:auto;
+}
+.reset:hover{color:var(--ink-2);border-color:var(--ink-3)}
+.linkBtn{font:inherit;font-size:12.5px;padding:7px 11px;border-radius:7px;cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--ink-3)}
+.linkBtn:hover{color:var(--ink-2);border-color:var(--ink-3)}
+
+:focus-visible{outline:2px solid var(--must);outline-offset:2px;border-radius:6px}
+
+@media (max-width:760px){
+  .bar{padding:7px 16px 8px}
+  .meter{position:absolute;inset-inline:0;bottom:0;height:4px;border-radius:0;min-width:0}
+  .bar-row:first-child{gap:8px}
+  .legend{gap:10px}
+  .shot{grid-template-columns:auto 1fr;gap:8px;padding:9px 10px}
+  .acts{grid-column:1 / -1;flex-direction:row;flex-wrap:wrap;gap:6px}
+  .pset{flex:1 1 auto}
+  .p{flex:1 1 auto;text-align:center;padding:10px 6px}
+  .noteBtn{flex:0 0 auto}
+  .id{flex-direction:column;gap:2px;padding-top:0}
+  .grip{height:28px}
+  h1{margin-bottom:4px}
+  .intro{padding:24px 0 16px}
+  .legend{gap:9px;font-size:12px}
+  .saved{margin-inline-start:0}
+}
+@media (max-width:400px){
+  .count{font-size:12.5px}
+  .legend{gap:8px;font-size:11.5px}
+  .saved{margin-inline-start:0;font-size:11.5px}
+  .chip{padding:8px 9px;font-size:12.5px}
+  .dl.small{font-size:12.5px;padding:8px 11px}
+  .p{font-size:12px;padding:10px 4px}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="intro">
+    <p class="eyebrow">רשימת שוטים · לתעדוף</p>
+    <h1>מה חובה, מה אפשר לוותר</h1>
+    <p class="sub">232 שוטים בשישה מקטעים, לפי סדר הסרט.</p>
+    <div class="brief">
+      <p>יגאל, זו רשימת כל השוטים שסוכמו בשיחות, מסודרת לפי סדר הסרט.</p>
+      <p>לכל שוט סמן את רמת החשיבות: <strong>חובה</strong>, <strong>בינוני</strong>, או <strong>אפשר לוותר</strong>. אם יש לך הערה על שוט, כתוב אותה בשדה ההערה. בסוף לחץ על "הורדת הקובץ לשליחה חזרה" ושלח לנו את הקובץ.</p>
+      <p>אפשר גם לשנות את הסדר: גררו שוט למעלה או למטה בתוך המקטע שלו, דרך ידית הנקודות שליד המספר.</p>
+      <p class="auto">העבודה נשמרת אוטומטית בדפדפן שלך, כך שאפשר לעצור באמצע ולחזור לאותו מקום מאוחר יותר.</p>
+    </div>
+  </header>
+
+  <div class="bar" id="bar">
+    <div class="bar-in">
+      <div class="bar-row">
+        <span class="count"><b id="cDone">0</b> מתוך 232 סווגו</span>
+        <div class="meter" aria-hidden="true">
+          <i class="m-must" id="mMust" style="width:0%"></i>
+          <i class="m-mid" id="mMid" style="width:0%"></i>
+          <i class="m-skip" id="mSkip" style="width:0%"></i>
+        </div>
+        <div class="legend">
+          <span><i class="dot d-must"></i>חובה <b id="cMust">0</b></span>
+          <span><i class="dot d-mid"></i>בינוני <b id="cMid">0</b></span>
+          <span><i class="dot d-skip"></i>ויתור <b id="cSkip">0</b></span>
+        </div>
+        <span class="saved" id="saved">נשמר אוטומטית</span>
+      </div>
+      <div class="bar-row">
+        <div class="filters" id="filters">
+          <button class="chip" data-f="all" aria-pressed="true">הכל</button>
+          <button class="chip" data-f="none" aria-pressed="false">לא סווגו</button>
+          <button class="chip" data-f="must" aria-pressed="false">חובה</button>
+          <button class="chip" data-f="mid" aria-pressed="false">בינוני</button>
+          <button class="chip" data-f="skip" aria-pressed="false">אפשר לוותר</button>
+        </div>
+        <button class="dl small" id="dlTop" style="margin-inline-start:auto">הורדת הקובץ לשליחה חזרה</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="app"></main>
+  <p class="empty hidden" id="empty">אין שוטים שמתאימים לסינון הזה.</p>
+
+  <footer class="foot">
+    <button class="dl" id="dlBottom">הורדת הקובץ לשליחה חזרה</button>
+    <button class="linkBtn" id="dlJson">גיבוי JSON</button>
+    <p class="note">הקובץ נפתח באקסל או בגיליון של גוגל, וכולל את התעדוף, ההערות והסדר שקבעת.</p>
+    <button class="reset" id="reset">התחל מחדש</button>
+  </footer>
+
+</div>
+
+<script type="application/json" id="data">[{"n":1,"tc":"0:00 פתיח","what":"נעימת \"צאמה\"","prod":"להשתמש בסאונד של צאמה בלבד","kinds":["סאונד"],"rights":"זכויות לבירור. קיימים עיבודים עכשוויים כולל ברי סחרוב","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":2,"tc":"0:00-2:00","what":"כל הבלוק מסווג כפתיח","prod":"קטגוריה אחת: \"פתיח, עד דקה שתיים\"","kinds":["סיווג"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":3,"tc":"0:00-0:46","what":"ראש הפתיח","prod":"אפשרות: כל הפתיח בלי מוזיקה, רק טקסט, והסאונד-אפ הראשון יהיה קול הרבי","kinds":["לא הוכרע"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":4,"tc":"0:46","what":"הפוטג' מתחילה. הרבי משלהב את הקהל בבית הכנסת","prod":"קהל בית הכנסת, הרבי משלהב. בנוסף שוט של בית הכנסת עצמו, לאינטראקציה רבי-קהל","kinds":["ארכיון","ייצור"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":5,"tc":"0:46","what":"הרבי מוחא כפיים","prod":"מוחא ידיים","kinds":["לא הוכרע"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":6,"tc":"1:00-1:10","what":"נרציה: 55 שנים לנשיאותו, לא היה מנהיג במידת ההשפעה","prod":"מניף ידיים אחרי שמתחילים לשיר, ומדבר","kinds":["ארכיון"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":7,"tc":"1:12","what":"הרבי עם אנשים חשובים: נתניהו, כדורי","prod":"להוסיף גם אריאל שרון ושמיר","kinds":["ארכיון","סטילס"],"rights":"זכויות לא נבדקו","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":8,"tc":"1:20-2:00","what":"נרציה: הופך לדמות משיחית, \"הרבי הוא אייקון, הרבי הוא מותג\"","prod":"לא נדון פריט","kinds":["לא הוכרע"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":9,"tc":"~2:00","what":"מגלה ספר תורה","prod":"סוף הפתיח","kinds":["לא הוכרע"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":10,"tc":"0:00-2:00","what":"החלטת צבע לפתיח","prod":"צבעוני","kinds":["סגנון"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":11,"tc":"2:00-2:27","what":"הטקסט בצהוב","prod":"להישאר עם הצהוב, בכוונה","kinds":["גרפיקה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":12,"tc":"2:27","what":"חזרה בזמן, המכתב לנשיא בן צבי","prod":"הנפשה: זום אין לכיתוב, הטקסט נכתב בלייב או הדגשת אותיות. במקום להציג בצהוב","kinds":["אנימציה","טיפוגרפיה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":13,"tc":"2:27","what":"נקודת המעבר לילדות","prod":"מ-2:27 שחור לבן","kinds":["סגנון"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":14,"tc":"2:42","what":"הרבי כילד","prod":"להראות את הרבי ילד","kinds":["סטילס","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":15,"tc":"~2:55","what":"נולד 1902, רוסיה הצארית, פוגרומים","prod":"פוטג' סטוק שכבר נרכש","kinds":["סטוק"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":16,"tc":"3:13","what":"שני אחים. אחד נרצח בשואה, ישראל אריה לייב הגיע לארץ","prod":"תמונה של אחיו בגיל מבוגר","kinds":["סטילס","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":17,"tc":"3:24","what":"לוי יצחק שניאורסון, האב, רב הקהילה","prod":"תמונת האב","kinds":["ארכיון","סטילס"],"rights":"כאן עלה הצורך למפות זכויות. סוכם מייל","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":18,"tc":"~3:40","what":"לא נאמר תוכן","prod":"הערת קולור קורקשן","kinds":["פוסט"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":19,"tc":"3:46","what":"מפת העולם","prod":"המפה על הקיר והוא מסתכל עליה","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":20,"tc":"3:57","what":"תמונה בשנות ה-20 לחייו, מודרני עם חליפה","prod":"הילייט עליו, אולי עומק שדה","kinds":["סטילס","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":21,"tc":"~4:05","what":"סטוק פוטג'","prod":"אולי לצבוע אותו","kinds":["סטוק","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":22,"tc":"4:12","what":"ברוסיה, בלי תעודת בגרות. אירופה של שנות ה-30","prod":"צדודית / פרופיל","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":23,"tc":"4:19","what":"הרבי הולך בברלין","prod":"להשלים עם סטוק פוטג'","kinds":["סטוק","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":24,"tc":"4:27","what":"ברחובות ברלין עם מישהו. תמונה שעבדו עליה הרבה","prod":"אולי להחליף. חלופה: POV מאחורה, חצי פרופיל 45-60 מעלות, \"אולי זה לא ממש הוא\"","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":25,"tc":"4:33","what":"לפני הסטוק של המעבר","prod":"חוזרים למפה, מברלין לפריז","kinds":["אנימציה","גרפיקה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":26,"tc":"4:35","what":"המשך המפה","prod":"מפת אירופה עם חץ בין הערים","kinds":["אנימציה","גרפיקה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":27,"tc":"4:40","what":"הרבי בפריז, בית ספר להנדסה","prod":"הרבי בפריז","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":28,"tc":"4:37 / 4:50","what":"לפי הרישום הישן: הרבי ואמו הולכים ברחובות פריז","prod":"לא הוכרע","kinds":["לא הוכרע"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":29,"tc":"4:45","what":"חיה מושקה, פעם ראשונה","prod":"תמונה של חיה מושקה","kinds":["סטילס","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":30,"tc":"5:02","what":"מסתכל מהחלון","prod":"over the shoulder: הצוואר והצווארון, ובחלון תמונה סימבולית של פריז","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":31,"tc":"~5:07","what":"תמונה של הרבנית, לא ידוע מי","prod":"לוותר, או להחליף בתמונה אחרת","kinds":["לא הוכרע"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":32,"tc":"5:11","what":"\"הרבנית הייתה אישה יוצאת דופן\"","prod":"חיה מושקה עוד פעם","kinds":["סטילס"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":33,"tc":"5:14","what":"אביה של חיה מושקה","prod":"תמונת האב","kinds":["ארכיון","סטילס"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":34,"tc":"5:18","what":"האדמו\"ר השישי (הריי\"צ), חמיו. שלוש בנות, חיה מושקה האמצעית","prod":"האדמו\"ר השישי ושלוש הבנות","kinds":["סטילס"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":35,"tc":"5:24","what":"אשתו של האדמו\"ר ובנותיה, תמונה \"נורא אדומה\"","prod":"לייצר תמונת מחזור של משפחת האדמו\"ר השישי","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":36,"tc":"5:34","what":"זיהוי חיה מושקה בתמונה המשפחתית","prod":"לסמן את חיה, השמאלית למטה","kinds":["גרפיקה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":37,"tc":"5:40","what":"החתונה. שתי הבנות האחרות יועדו לבניו של לוי יצחק, ורבי לייבל עזב את הדת","prod":"הרבי מצד אחד, ואז דולי סייד לתמונה של חיה","kinds":["אנימציה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":38,"tc":"5:49","what":"הרבנית לא ויתרה על חייה הקודמים","prod":"הרבנית במסעדה עם החברות החילוניות","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":39,"tc":"5:55","what":"רואים אותה שוב, מודרנית","prod":"תמונת פספורט ישנה ששופצה","kinds":["סטילס","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":40,"tc":"6:05","what":"החתונה, הם מתחברים","prod":"הזמנת החתונה יוצאת החוצה מהמכתב, בסגנון מכתב בן צבי","kinds":["אנימציה"],"rights":"הזכויות בסדר. \"אני צריך לחשוב על זה\"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":41,"tc":"6:10 (הוזז מ-6:17)","what":"חוט חסידי, חבל טבור שדרכו יונק את המשיכה לחמיו","prod":"משיכת הכלה בחבל, קלוז-אפ. הרבי מושך ומביא אותה אליו","kinds":["אנימציה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":42,"tc":"6:20","what":"הרבי עם האדמו\"ר בשולחן, האדמו\"ר כותב","prod":"לא חייבים שולחן. אפשר פארק, ספסל בגינה","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":43,"tc":"6:31 / 6:32","what":"משחקי שחמט והליכת רחוב","prod":"שונה: הרבי יושב ולומד, ויושבים בגינה על ספסל","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":44,"tc":"6:35","what":"הרבי בספריית האוניברסיטה, וחמיו כותב לו","prod":"הרבי בספריית האוניברסיטה","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":45,"tc":"6:37","what":"האדמו\"ר שולח מכתב","prod":"ספליט סקרין: האדמו\"ר שולח, הרבי פותח וקורא","kinds":["אנימציה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":46,"tc":"6:47","what":"חמיו מפציר: \"מנדלי, תיקח על עצמך משימה\"","prod":"האדמו\"ר השישי כותב מכתב","kinds":["סטילס","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":47,"tc":"6:56","what":"המשך ההפצרה","prod":"הרבי מקפל את המכתב ומכניס למגירה","kinds":["אנימציה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":48,"tc":"7:04","what":"\"תעזבו אותי, זה לא התפקיד שלי\"","prod":"אנשים מדברים אליו והוא מתרחק, הוא במרכז והם סביבו","kinds":["אנימציה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":49,"tc":"7:22","what":"רשם את עצמו בספר הטלפונים כמהנדס חופשי","prod":"over the shoulder, משרבט משהו","kinds":["אנימציה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":50,"tc":"7:28","what":"הנאצים מגיעים","prod":"סטוק פוטג'","kinds":["סטוק"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":51,"tc":"7:31","what":"המעבר לאמריקה","prod":"חוזרים למפה, קו מפריז לארה\"ב","kinds":["אנימציה","גרפיקה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":52,"tc":"7:41","what":"הגעה לניו יורק","prod":"הרבי הולך או עובד בנמל ברוקלין","kinds":["AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":53,"tc":"7:52","what":"האב כבר נפטר, האבל התחיל","prod":"מצבת לוי יצחק, להשאיר ולעשות מסגרת יפה יותר","kinds":["סטילס"],"rights":"\"פה לא צריך זכויות\". מכאן ההערות מסונכרנות לקאט הנוכחי","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":54,"tc":"7:55","what":"מגיע לחצר חב\"ד, נכנס בדלת","prod":"סילואטה: נכנס לבית הכנסת, הדלת נסגרת, מגן דוד. עדיין שחור לבן","kinds":["אנימציה"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":55,"tc":"~8:00","what":"\"תוך חב\"ד, הפעם הראשונה שהוא חי\"","prod":"לא צריך את התמונה שבקאט","kinds":["לא הוכרע"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":56,"tc":"8:07","what":"הרבי בברוקלין","prod":"מוקף במאמינים","kinds":["ארכיון","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":57,"tc":"8:10-8:18","what":"תנועת החסידות באוקראינה, המאה ה-18","prod":"להשתמש בתמונות הקיימות, ליצור אותן מעניינות עם תנועה","kinds":["אנימציה","סטילס"],"rights":"\"כי אנחנו יכולים\", כלומר יש זכויות","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":58,"tc":"8:19-8:20","what":"ישראל בעל שם טוב, \"כל אדם יכול להידבק באל\"","prod":"הבעש\"ט מדבר לחסידיו","kinds":["סטילס","AI"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":59,"tc":"8:36","what":"רבי יוסף יצחק הגיע לארה\"ב והקים קהל חסידי","prod":"נקודת עצירה","kinds":["ללא"],"rights":"","sec":"שיחה א","secspan":"0:00 עד 8:36"},{"n":60,"tc":"8:38-8:42","what":"הרבי השישי מגיע לארה\"ב, \"אני הגעתי לארצות הברית\"","prod":"יורד מכבש האונייה, OTS, אנשים מחכים למטה, \"יורד בשירה\". שוט \"מאוד ארטי\"","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":61,"tc":"8:38-8:42","what":"הבהרה: קפיצה אחורה לשנות ה-40, לפני המינוי ב-1951","prod":"לא שוט. להתייחס כווינייטה, חלון בזמן","kinds":["הבהרה"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":62,"tc":"8:43","what":"הרבי השישי נואם: \"המקום הכי נמוך רוחני בעולם ואני באתי להעלות\"","prod":"נואם מול הקהילה עם ליפסינג","kinds":["ליפסינג","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":63,"tc":"8:58","what":"המשך הנאום. VO: 1945, גודל האסון","prod":"טו-שוט הפוך מהצד השני של הפריים. מיקרופון ישן של גלגלת","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":64,"tc":"9:23","what":"הרבי השישי נכנס לאפזיה ושיתוק אחרי שהמשיח לא הגיע","prod":"קלוז-אפ על העיניים מתוך סטילס מפורסם. \"אפשר לצלול עליה, אפשר גם לשבור אותה\"","kinds":["ארכיון","סטילס"],"rights":"סומן זכויות. \"לא נמות אם לא תהיה פה תמונה\"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":65,"tc":"~9:30","what":"הרבי בסביבת חסידים, ארגון מחדש של עולם חב\"ד המתמוטט","prod":"\"עצבות, קדרות, בדידות\"","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":66,"tc":"9:40","what":"ארון הקבורה של האדמו\"ר השישי נישא בידי החסידים","prod":"לייצר מאפס. \"זה ממש לא בעיה\"","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":67,"tc":"9:50","what":"פטירת השישי ב-1950 ושני היורשים","prod":"שלושתם סביב שולחן. דולי סייד: מתחילים משניים, נפתחים ומגלים את הרבי","kinds":["סטילס","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":68,"tc":"9:56","what":"הרבנית נחמה דינה, אלמנת השישי, שתמכה בגוראריה","prod":"תמונה בודדת שלה ואז פתיחה לבעלה. מועדף: שניהם במטבח, דולי אאוט","kinds":["ארכיון","AI","משתי תמונות"],"rights":"סומן זכויות + שם. איחוד שתי תמונות לשוט אחד","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":69,"tc":"10:18","what":"אין יורש ברור, בלבול בחצר","prod":"כיסא אדמו\"ר ריק, סילואטות של מאמינים מסתכלים ימינה ושמאלה","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":70,"tc":"10:20-10:40","what":"הרבי כדמות מהוססת שלא רוצה להיות בראש","prod":"קלוז-אפ עם מבט חודר, זום אין לעיניים, ובתוכן אולי המאמינים","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":71,"tc":"10:38 (לבירור)","what":"הצגת רבי שמריהו גוראריה, המתחרה, מספר שתיים","prod":"לייצר תמונה שלו, ואולי טייטל על המסך","kinds":["גרפיקה","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":72,"tc":"10:56","what":"הרבי מתכנס לנאום ההכתרה","prod":"מגיע בחזרה לבית הכנסת אחרי שהוא לומד, מאמינים סביבו. \"הוא כבר לא לבד\"","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":73,"tc":"11:06","what":"תמונה נדירה של הרבי ואשתו. VO: \"אם לא תהפוך לרבי, כל החיים שלי היו מבוזבזים\"","prod":"OTS מאחוריה עליו, מרים ראש ומסתכל בעיניה. אופציה: קלוז-אפ שפתיים בליפסינג","kinds":["ליפסינג","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":74,"tc":"11:12","what":"\"והנה הגיע הרגע שלא חיכית. הצבע\"","prod":"הוחלט לדחות את הצבע. הרבי בהתוועדות, החסידים שרים, עדיין שחור-לבן","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":75,"tc":"11:23","what":"גוראריה משמאל והשישי מימין. \"ראו בו משהו חדש\"","prod":"גוראריה מתחיל לעכל, משפיל ראש אבל עדיין עם מבט","kinds":["סטילס","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":76,"tc":"12:06","what":"חסידים שרים, \"המוזיקה שלנו\"","prod":"גלימפסים ראשונים של צבע, נגיעות כרמז מקדים","kinds":["AI","קולור"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":77,"tc":"12:09","what":"הרבי מתמלא בצבע, \"let's change the world\"","prod":"קלוז-אפ שפתיים, \"הרבי בשפתיו: בוא נשנה את העולם\"","kinds":["ליפסינג","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":78,"tc":"לא צוין","what":"VO: ברוכים הבאים ל-770, מרכז חב\"ד העולמי","prod":"לא הוכרע","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":79,"tc":"13:15","what":"תוך שנה הופך לאדמו\"ר השביעי. \"אני אהיה מהנדס של אנשים\"","prod":"מול המראה, בלי עניבה ועם בגדי חסיד. מוריד עניבה, שם כובע, מתארגן ויוצא. הצבע מתחיל להתמלא","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":80,"tc":"13:36","what":"\"בוודאי שאשתו הייתה דמות דומיננטית\"","prod":"נשקל להראות שוב אותה, כולל תמונה ספוקית פילם נואר","kinds":["סטילס","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":81,"tc":"13:39","what":"הרבי מול הקהל. VO: תפס את הנשים כחלק משמעותי","prod":"להפוך: הרבי ימין פריים והפוקוס על נשים בקהל, או סילואטות נשים במקום רבנים. בנוסף: הולך בין הנשים","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":82,"tc":"13:47","what":"המשך הרצף","prod":"\"הרבי נואם מול קהל נשי\"","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":83,"tc":"13:48","what":"הרבי מחלק משהו לנשים על רקע שמחה","prod":"בהתחלה נאמר דולרים, תוקן: כנראה יין קודש","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":84,"tc":"13:58","what":"הרבי יוצא החוצה","prod":"הולך בפורגראונד, הנשים מריעות בבקגראונד","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":85,"tc":"14:08 / 14:10","what":"\"הרבנית רצתה רב, והיא קיבלה רבי\"","prod":"טו-שוט קטן של בני הזוג. אופציות: פארק, יושבים, או תה בסלון עם זום","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":86,"tc":"14:18","what":"גוראריה מסתכל על הרבי. \"the winner is taking it all\"","prod":"מתחילים ממנו מסתכל בקנאה, נפתחים לרבי שלוחצים את ידיו","kinds":["סטילס","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":87,"tc":"14:29","what":"האלמנה לא נתנה את השטריימל, מתיחות","prod":"לחיצת יד: מתחילים מהידיים ונפתחים לשניהם","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":88,"tc":"14:50 (תוקן מ-14:52)","what":"עולה על כס הנשיאות, המאמר \"באתי לגני\"","prod":"\"נכנס לנאום ההכתרה\". כאן הצבע נכנס במלואו, בטרנזיציה איטית","kinds":["AI","טרנזיציה לצבע"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":89,"tc":"15:06","what":"קושר מטפחת על ידו כדי שהנשמה לא תיפרד מהגוף","prod":"קלוז-אפ על הידיים קושרות","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":90,"tc":"15:22","what":"הרב קראוס: \"אנחנו הדור\", השביעי בשושלת","prod":"ליפסינג של הרבי מדבר לקהל","kinds":["ליפסינג","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":91,"tc":"15:47","what":"מחיל את \"שביעי\" על כל הדור","prod":"זום אאוט מהרבי אל כל הדור","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":92,"tc":"15:54 (תוקן מ-15:47)","what":"המשך","prod":"\"זום אאוט לקהל השביעי\", קהל גדול","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":93,"tc":"16:16","what":"הדור השביעי, האחרון לגלות והראשון לגאולה","prod":"המתפללים עם הפנים קדימה. הכל כבר בצבע","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":94,"tc":"16:25","what":"רבי שיש לו חסידים בכל העולם","prod":"\"חסידים מתפללים\" בכל העולם. אולי גם מפה","kinds":["גרפיקה","AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":95,"tc":"17:10","what":"שנות ה-60, וודסטוק, כניסה לקמפוסים, קמפיין התפילין","prod":"הרבי בצבע במרכז הספרייה, חסידים סביבו, מדבר על תפילין. אופציה ארטית: מישהו מניח תפילין, זום אאוט, הוא מדבר ברקע. אופציה: ספליט סקרין","kinds":["AI"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":96,"tc":"17:36","what":"הרבי נכנס בין מאמינים","prod":"פוטג' קיים, אותו שהשתמשו בו בפתיח, פלוס שילוב. אפשר גם הסאונד שלהם","kinds":["ארכיון"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":97,"tc":"~17:40","what":"טנק המצוות של חב\"ד, נולד ב-1974","prod":"לא צריך לייצר. \"זה פוטג' שלי, לגמרי. סצנה דוקומנטרית בנויה לעילא\"","kinds":["צילום קיים"],"rights":"","sec":"שיחה ב","secspan":"8:38 עד 17:40"},{"n":98,"tc":"18:10","what":"הערת מאקרו: 15 הדקות הראשונות הן \"הבטן של הסרט\", אנכרוניסטיות, שחור-לבן, משעממות. מכאן יותר קצב ודרמה","prod":"אין החלטת ייצור. הצבת ציפייה: מכאן השוטים גנריים יותר","kinds":["הערת כיוון"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":99,"tc":"18:15-20:40","what":"הולדת מבצע טנקים: תפילין ברחוב, גשם, טנדר עם שולחן, ונים עם הפנים החוצה, \"אלה הטנקים שלנו\"","prod":"לא הוכרעה החלטה נקודתית","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":100,"tc":"20:00-20:40","what":"ראיון עם דובר חב\"די על שני תפקידי הטנק","prod":"הוחלט לא להוסיף אלמנטים של הרבי על הראיון","kinds":["ראיון","ללא טיפול"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":101,"tc":"20:42","what":"\"לא, לא, לא, לא\". חדירה לקיבוצים, \"גייס חמישי\"","prod":"ליפסינג, מידיום שוט, הרבי מדבר לחסידיו","kinds":["ליפסינג","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":102,"tc":"20:56","what":"על \"גייס חמישי\" רצה תמונה קיימת","prod":"להחליף במצווה-טאנק מול טאנק צה\"לי, מניחים תפילין","kinds":["ארכיון","סטילס","קיים"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":103,"tc":"21:56","what":"\"ופרצת ימה וקדמה צפונה ונגבה\"","prod":"פס קול של ופרצת. אופציות: הקלטה + voice change, או גרסה רויאלטי-פרי. נטו לרויאלטי-פרי","kinds":["סאונד","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":104,"tc":"~22:00","what":"הרבי בתנועות ידיים מול קהל, אקסטטי","prod":"פוטג' קיים, אותו שכבר בשימוש בפתיח. כאן עולה \"די-ג'י רבי\"","kinds":["ארכיון","קיים"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":105,"tc":"22:30","what":"השוואה: מנורת מדינת ישראל מול מנורת בית חב\"ד","prod":"ספליט סקרין. צריך לצייר, אין פוטג'","kinds":["גרפיקה","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":106,"tc":"22:39","what":"הרבי הולך בין המעריצים ואל הילדים","prod":"פוטג' קיים","kinds":["ארכיון"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":107,"tc":"22:49","what":"מכנס ילדים מתחת לבר מצווה. \"את המהפכה אני יכול לעשות עם הילדים\"","prod":"ליצור קהל של ילדים דתיים בגיל 14 ומעלה","kinds":["AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":108,"tc":"22:50-23:00","what":"הילדים שרים \"We Want Moshiach Now\"","prod":"חייבים להשיג את הסאונד, אפשר גם להקליט","kinds":["סאונד","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":109,"tc":"23:08","what":"עוד פוטג' של הרבי במרכז וילדים סביבו","prod":"אותו קו, אותה מגבלת גיל","kinds":["ארכיון","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":110,"tc":"~23:20","what":"משקולת בשמיים, כל מצווה מוסיפה על הכף","prod":"הפוטג' של יגאל. הוצע להמחיש משקולת וכף בשמיים","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":111,"tc":"23:40","what":"קטע עם עיתונאי","prod":"לחתוך. \"זה ממש צריך להיחתך\"","kinds":["חיתוך"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":112,"tc":"~24:00","what":"\"פצצת אטום לעולם היהודי\"","prod":"להשאיר. משפט לפרומו","kinds":["ראיון קיים"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":113,"tc":"24:22","what":"חלוקת דולרים לצדקה בכל יום ראשון","prod":"לתייג: \"הרב מחלק צדקה\"","kinds":["ארכיון"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":114,"tc":"24:42","what":"המשך חלוקת הדולרים","prod":"לחתוך","kinds":["חיתוך"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":115,"tc":"~24:49","what":"\"הוא הפך להיות אחד מהגורואים הגדולים\"","prod":"שוט שילוב בקונסטלציה נוספת. מיד עלה חשש: \"אנחנו עושים כבר רפליקות של הדבר הזה\"","kinds":["AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":116,"tc":"25:00","what":"הרבי בניגונים, מדליק את הקהל","prod":"הרבי בפרונט מדבר, ואז סופר-דולי אחורה שמציף אותו בקהל צועק. \"די-ג'י אחי, די-ג'י\"","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":117,"tc":"~25:10","what":"הרב שך על חב\"ד: \"הכת הקרובה ביותר ליהדות\"","prod":"הפוטג' שלהם, אבל אי אפשר להשאיר כמו שזה. אותו דבר לגבי ליבוביץ'","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":118,"tc":"25:24","what":"שירת We Want Moshiach כרליף בעריכה","prod":"\"אולי אפשר גם בלי זה, בוא נראה איפה זה יוצא\"","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":119,"tc":"25:30-25:44","what":"הרבי מוחא כפיים, אנשים קופצים לפי הקצב","prod":"בין הרב שך לליבוביץ' להכניס כמה שוטים אקסטטיים, זוויות משתנות","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":120,"tc":"25:45","what":"המשיח כטאבו, ומה זה \"ביאת המשיח\"","prod":"לא הוכרע. הצעת יגאל: סטריפ עם הכיתוב \"משיח\" נגרר אחרי מטוס, כמו בחופי תל אביב","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":121,"tc":"26:06-26:15","what":"דיבור ביידיש: \"תחת מלך מבית דוד, ריבונות, בארץ המובטחת\"","prod":"אין להם את החומר","kinds":["חסר"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":122,"tc":"26:16","what":"\"אתם הדור האחרון לגלות והדור הראשון לגאולה\"","prod":"ליפסינג, הרבי מדבר לקהל","kinds":["ליפסינג","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":123,"tc":"26:40","what":"הרבי הצעיר לצד האדמו\"ר השישי","prod":"תצלומים של שני האדמו\"רים ביחד","kinds":["ארכיון","סטילס"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":124,"tc":"26:50","what":"אוסף פתקים מכל העולם ונוסע לקבר הריי\"ץ","prod":"סיקוונס בשלושה טאקטים: שמים ברכות בשק, לוקח ונכנס לאוטו, מגיע לבית הקברות","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":125,"tc":"~27:00","what":"הפתקים לקברו של הריי\"ץ","prod":"דרושה תמונה של הקבר. יש אחת, אפשר להבין מה כתוב למעלה. אפשר רויאלטי-פרי","kinds":["סטילס","רויאלטי-פרי"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":126,"tc":"27:49-28:13","what":"נוסע בקדילאק, יוצא מהרכב ונכנס ל-770","prod":"קולאז' בשלושה טאקטים: נכנס לאוטו, נוסע, מגיע ל-770. \"כל זה אין לנו\"","kinds":["אנימציה","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":127,"tc":"28:16","what":"הרבי וילדים. אין לו יורש, ולמשיח אין ילדים","prod":"פוטג' של הרבי וילדים","kinds":["ארכיון","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":128,"tc":"28:55","what":"הרבנית חיה מושקה, חסוכת בנים","prod":"לשים תמונה שלה. \"בול\"","kinds":["ארכיון","סטילס"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":129,"tc":"29:37","what":"\"המשיח יבוא ממש. משיח מנחם שמו\"","prod":"אין חומר. להשתמש בליפסינג שנוצר קודם ולהוריד את החלק","kinds":["חיתוך","AI","מיחזור"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":130,"tc":"30:00-30:31","what":"הנאום על התודעה המשיחית","prod":"לחתוך","kinds":["חיתוך"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":131,"tc":"~30:37","what":"המתווה המשיחי על בסיס הרמב\"ם","prod":"תמונת הרמב\"ם, רויאלטי-פרי. טאץ'-אפ: להכניס צבע, \"נחיה אותו קצת\", יותר אמיתי מציור. אולי תלת-מימד","kinds":["סטילס","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":132,"tc":"30:32","what":"קלוזאפ. \"הוא אמר תצעקו את זה\"","prod":"לחזור על ההיגד ואז מעבר לקהל","kinds":["ארכיון","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":133,"tc":"30:38-30:46","what":"\"הייתה לו תודעה שהוא אמור להיות המשיח של הדור\"","prod":"קטע באורך 8 שניות","kinds":["לא הוכרע"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":134,"tc":"30:55","what":"הרבי בטלית","prod":"יגאל רצה להוריד לגמרי. הוחלט להחליף ולא להוריד","kinds":["ארכיון","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":135,"tc":"31:06","what":"\"המתח המשיחי הוא הזרז לחזרה בתשובה\"","prod":"עובר בין מאמינים עם ספר ביד","kinds":["ארכיון","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":136,"tc":"31:14","what":"כיפות ה\"יחי\", ההחתמות והפסיקות","prod":"להראות את כיפות היחי. רואים אותו יוצא ואז נסגרים על כיפת יחי","kinds":["גרפיקה","AI"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":137,"tc":"31:19-31:39","what":"דובר ספרדי על \"קבלת פני משיח\"","prod":"נאמר \"כל זה יורד\", כנראה חיתוך","kinds":["לא ברור"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":138,"tc":"31:39-31:53","what":"שלושה פוסקי הלכה פסקו שהרבי הוא המשיח, חיכו לו לפני המקווה, הגישו פסק, הוא אמר \"יישר כוח\" ושם בכיס","prod":"את כל הסיפור באילוסטרציה","kinds":["אנימציה","איור"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":139,"tc":"~31:55","what":"דובר מציג מצלמת מינולטה ישנה, ארגז שלא נפתח 30 שנה","prod":"לא הוכרע. מקור ארכיון פוטנציאלי","kinds":["ארכיון","פוטנציאלי"],"rights":"","sec":"שיחה ג","secspan":"18:10 עד 31:53"},{"n":140,"tc":"31:39","what":"שלושה פוסקי הלכה פסקו שהרבי הוא המשיח, הגישו לו את הפסק לפני המקווה, הוא אמר \"ישר כוח\" ושם בכיס","prod":"גרופ שוט באילוסטרציה עם שלושה רבנים","kinds":["אנימציה","איור"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":141,"tc":"31:53 עד 32:35","what":"דיון: הקריינות אומרת \"הדמות היהודית המצולמת ביותר בהיסטוריה\", אבל הסיקוונס כולו אנימציה. \"אם הוא מצולם, אז למה אנימציה?\"","prod":"לא להוריד לא את המשפט ולא את הסיקוונס. להעביר את המשפט לפרומו, כך שהצופה כבר מבין למה אנימציה. הטייטל שנקבע: \"הסיפור שלא סופר, כפי שטרם נראה\"","kinds":["גרפיקה","החלטת עריכה"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":142,"tc":"32:35","what":"\"היהודי שסלד מתמונות, ויש ממנו הכי הרבה תמונות בעולם\"","prod":"קולאז' של צילומים","kinds":["אנימציה"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":143,"tc":"33:06","what":"הרבי הולך ליד הרכב. הקריינות: צולם כמעט בכל רגע, נטילת ידיים, אוכל, מדבר עם ילדה","prod":"שני דברים: שוט גנרי של הליכה ליד הרכב, וסיקוונס \"חדר בקרה\" בהשראת הפתיח של \"סנאץ'\" של גיא ריצ'י. סילואטות מול מוניטורים, דולי סייד ממוניטור למוניטור, ובכל אחד הרבי בסיטואציה אחרת","kinds":["אנימציה"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":144,"tc":"33:40","what":"\"כל הארכיון הוויזואלי קיים, וחב\"ד יודעת להשתמש בו\"","prod":"חזרה לחדר הבקרה, סילואטות מאחורה של אנשים לוחצים על כפתורים","kinds":["אנימציה"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":145,"tc":"33:50 עד 35:30","what":"חדר השידורים ב-770, ראיון עם חיים ברוך אלברשטם, השידור הראשון, 420 קווי טלפון ו-600 נקודות בעולם","prod":"נחתך כמו שהוא, לא מייצרים כלום","kinds":["ארכיון","ראיון"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":146,"tc":"~35:30","what":"קטע עודד בן עמי","prod":"להוריד","kinds":["חיתוך"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":147,"tc":"~35:30 (חזרה אחורה)","what":"הקטע שבו בן עמי מציע לקנות את הארכיון של חב\"ד","prod":"רעיון: להחזיר את הקטע בתוך מסך טלוויזיה מצויר, כברידג' בין הפרק על התחכום הטכנולוגי לפרק \"למה לא ביקר בארץ\"","kinds":["לא הוכרע"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":148,"tc":"35:52 עד 36:05","what":"הסוגיה המרכזית: למה מעולם לא ביקר בארץ. \"עם ישראל חשוב ביותר, מדינת ישראל חסרת משמעות\"","prod":"נשאר כמו שהוא","kinds":["ארכיון","ראיון"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":149,"tc":"36:10","what":"חב\"ד במקור אנטי ציונית. מחאות נגד מדינת ישראל","prod":"להשלים את התמונה לפול פריים","kinds":["AI","השלמת פריים"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":150,"tc":"36:23","what":"\"בכל שלט במדינה יש את התמונה, הוא המשיח\"","prod":"שלוש עד ארבע תמונות","kinds":["סטילס"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":151,"tc":"36:42","what":"הרבי עם טלית. סירב להגיע כי חשש שיהיה אנוס להישאר, וכי אז יצטרך להתגלות","prod":"להמשיך עם מוטיב המסכים, הפעם בציורים. צ'אנק של הרבי עם טלית: ליד ספר תורה, ליד הכיסא, הולך בבית הכנסת, סמפל אחר בכל פעם. הניסוח שננעל: \"הרבי עם טלית מתפלל ומסתכל על מאמיניו\"","kinds":["אנימציה","איור"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":152,"tc":"36:49","what":"המפגש עם הנשיא זלמן שזר","prod":"ציור של שזר בסגנון שנקבע לביבי: מגיע מרחובות ניו יורק עם הפמליה ל-770, נכנס בדלת","kinds":["AI","איור"],"rights":"זכויות פתוחות על הפוטו של שזר. אם אין, מייצרים אותו מתמונות רויאלטי פרי","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":153,"tc":"36:57","what":"שזר בפגישה שם כיסוי ראש. התקשורת כמרקחה והמערכת הפוליטית תוקפת","prod":"לא הוכרע","kinds":["לא הוכרע"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":154,"tc":"37:08","what":"גולדה מאיר","prod":"\"אולי נעשה גם את גולדה מאיר\", גולדה עם שזר, שימוש בתמונה הקיימת","kinds":["ארכיון","סטילס"],"rights":"נשאל על זכויות ונענה כן","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":155,"tc":"37:20 עד 37:35","what":"קטע ביידיש, 15 שניות","prod":"להוריד","kinds":["חיתוך"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":156,"tc":"37:51","what":"תחילת הקולאז' של הרבי עם שליטי ישראל","prod":"קולאז' עם בגין, שרון, שמיר ורבין. בלי ביבי. בלי מסכים. ציורים או פלקטים, ארבע תמונות, מעברים בפלאשים של מצלמה","kinds":["אנימציה","איור"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":157,"tc":"37:53 עד 38:14","what":"הקטע עם שרון, על זכותנו ההיסטורית ועל החלטת האו\"ם","prod":"להוריד","kinds":["חיתוך"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":158,"tc":"~38:20 עד 38:41","what":"שיקולי ביטחון, מלחמת יום הכיפורים 1973, מסר ללשכת משה דיין דרך יוסי צ'כנובר, הצעה לכבוש את דמשק","prod":"לא הוכרע","kinds":["לא הוכרע"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":159,"tc":"38:41","what":"תמונה של משה דיין","prod":"יש תמונה, אפשר להשתמש בה","kinds":["ארכיון","סטילס"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":160,"tc":"~38:45","what":"יוסי צ'כנובר מספר","prod":"אפשר להשתמש בתמונה שלו","kinds":["ארכיון","סטילס"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":161,"tc":"38:48","what":"\"אדוני השר, יש לי שליחות\"","prod":"\"מעשה ביבי\": הרבי נכנס במסדרון מתוך התמונה, לוחץ יד ולוחש באוזן","kinds":["אנימציה","AI"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":162,"tc":"39:11 עד 39:31","what":"המפגש של נתניהו עם הרבי. \"המשיח והמשיח שבדרך\"","prod":"לייצר את המפגש: ביבי נכנס, כמו קודם רק בצבע. הלחישה \"הם שכחו מה זה להיות יהודים\" היא הרפרנס","kinds":["אנימציה","ארכיון","חיתוך","AI"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":163,"tc":"39:41 עד 39:50","what":"\"הרבי עונה לו: המשך לשרת מכאן עד ביאת המשיח\"","prod":"ליפסינג, אבל הפעם הרבי מדבר ישירות לביבי","kinds":["ליפסינג"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":164,"tc":"~40:04","what":"\"לאחר שנתניהו נבחר, הרבי כן ברך אותו\"","prod":"המקטע השלישי להסרה","kinds":["סאונד","חיתוך"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":165,"tc":"39:11 עד 40:17","what":"כל רצף ביבי","prod":"לבנות את הסיקוונס כולו בלי הארכיון של ביבי, כאילו הם מדברים: פלאשים, ופוינט אוב וויו מעל הכתף של ביבי","kinds":["אנימציה","AI"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":166,"tc":"40:17","what":"\"וגם לכל ראש ממשלה שיחיה כאן עד ביאת המשיח\"","prod":"נשאר","kinds":["ארכיון"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":167,"tc":"עד 40:36","what":"תוכן לא ברור בתמלול","prod":"להוריד","kinds":["חיתוך"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":168,"tc":"~40:40 עד 41:00","what":"יעקב פרי, ראשי השב\"כ בקשר עם הרבי. הרבי חזה עלייה של הטרור האסלאמי","prod":"לא הוכרע. \"זה מסוג הדברים שאין לנו ויזואליה\"","kinds":["לא הוכרע"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":169,"tc":"41:00","what":"\"יחד עם ההתגברות של הטרור האסלאמי\"","prod":"לנסות להכניס את יעקב פרי ואת הסילואטה של הרבי, ואז להלים לתמונה של כפייה ונשק","kinds":["אנימציה","AI"],"rights":"","sec":"המשך א","secspan":"31:39 עד 41:00"},{"n":170,"tc":"41:18","what":"קליפ אקסטטי של תפילה ושירה, \"אין עוד מלבדו\", ההמון והרבי","prod":"פילר אומנותי: מתחילים על הרבי לבד, שומעים מוזיקה והמון, ולאט הפריים מוצף באנשים והפוקוס עובר אליהם. \"הרבי משלהב את הקהל שמשלהב אותו\"","kinds":["אנימציה","סאונד","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":171,"tc":"41:39","what":"תמונת הרבי בשולחן, הפריים מנאום ההכתרה","prod":"קלוז-אפ פורטרט עם מבט יוקד, זום אין לתוך העין, ובתוך האישון רואים את החסידים. \"חסידים ואדמו\"ר, זו אחדות אחת\"","kinds":["אנימציה","סטילס","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":172,"tc":"41:50","what":"האדמו\"ר הריי\"צ קנה במשך עשרות שנים אוסף ספרים ענק שנהפך לספרייה","prod":"להשתמש באחת התמונות הקיימות של השניים ביחד","kinds":["סטילס","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":173,"tc":"42:56","what":"\"משפט הספרים הוא לא על הספרים, זה על הכיסא\"","prod":"להראות שוב את הכיסא הריק","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":174,"tc":"43:28","what":"הרבי בהתוועדות. \"אף פעם הוא לא דיבר עם כזה כאב לב\"","prod":"הרבי עצבני, מחמיר פנים. ליפסינג על הנאום שלו","kinds":["ליפסינג"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":175,"tc":"43:43","what":"כל יום נוסע לאוהל ושוהה שעות בתפילה","prod":"הרבי מצולם מאחורה, מול קבר האדמו\"ר השישי, נושא תפילה","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":176,"tc":"44:01","what":"הרבנית לא נחקרה בבית המשפט, נגבתה עדות חוץ בביתה. דקות לפני, מודיעים שגם האחות ובנה מגיעים","prod":"סיקוונס דרמה בשלושה מהלכים: עורכי הדין בבית, קדילק נכנס לרחוב ניו יורקי ויוצאות ממנו האחות והבן, ואז המאייר של בית המשפט שמאייר את הסצנה הבאה","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":177,"tc":"44:10 עד 44:15","what":"הרבנית נותנת עדות בביתה","prod":"לראות את הרבי ואת הרבנית בתוך הבית, הרבנית מדברת. אפשר בווייס אובר","kinds":["אנימציה","סאונד","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":178,"tc":"44:26","what":"עורך הדין שואל: \"רבנית, למי הספרים היו שייכים, לאבא או לחסידים?\"","prod":"קלוז-אפ על פני עורך הדין, ליפסינג","kinds":["ליפסינג"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":179,"tc":"44:35","what":"\"הרבי שייך לחסידים, אז כמובן שהספרים שייכים לחסידים\". השופט התרשם","prod":"עורך הדין שואל, ליפסינג","kinds":["ליפסינג"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":180,"tc":"44:44","what":"הקרנבל אחרי המשפט, \"יום הבשורה\", ריקודי ניצחון. \"בעיר שושן צהלה ושמחה\"","prod":"חסידים רוקדים מחוץ ל-770, והספרים חוזרים לארון","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":181,"tc":"לא ברור (נאמר 43:36, כנראה שיבוש. ממוקם אחרי 44:44 ולפני 46:22)","what":"הרבנית נפטרת. הלוויית הרבנית","prod":"הלוויית הרבנית כולה באנימציה. הסאונד המקורי מועבר","kinds":["אנימציה","סאונד"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":182,"tc":"46:22 (תוקן מ-46:18)","what":"הרבי חוזר מהלוויית הרבנית, הבית מתרוקן","prod":"הרבי אבל וחפוי, קולאז' ומעבר, עובר על רקע הבית ונכנס אליו","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":183,"tc":"47:51","what":"הרבי מסדר לילות שלמים את חדרו, בוחר מה להשאיר ומה לגנוז, מתכונן ליום שבו לא יהיה","prod":"הרבי מול המראה, אותו סטינג כמו קודם אבל עכשיו כאיש זקן. סגירת מעגל","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":184,"tc":"47:59","what":"הנאום המחולל, \"אני את שלי עשיתי\". \"היה כזה הס\"","prod":"סיקוונס: אנשים מתפללים, הרבי מסתכל במראה, יוצא למסדרון, מעבר לבית כנסת שמתמלא לדרשת שבת, כולם חושבים שזו עוד דרשה, ואז הוא זורק את הפצצה. פנים של חסידים מופתעים, דולי סייד","kinds":["אנימציה","חיתוך","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":185,"tc":"48:51","what":"\"גמרנו את כל העבודה, צחצחו כבר את הכפתורים\", דימוי המדים בצבא של הצמח צדק","prod":"לא הוכרע. איתן רצה ביטוי ויזואלי של כפתורים מצוחצחים, יגאל העדיף את הרבי מדבר","kinds":["לא הוכרע"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":186,"tc":"49:00 עד 49:09","what":"\"ידע שיש לו צבא, ובצבא הזה הוא יכבוש את העולם\"","prod":"להסיר את הפוטג' ולעלות עליו, אבל להשאיר את הדיבור","kinds":["סאונד","חיתוך"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":187,"tc":"49:17 עד 49:37","what":"ההמשך אחרי \"יכבוש את העולם\"","prod":"חסידים חפויי ראש, אנשים משפילים את ראשם. המשפט ייכנס בתוך האנימציה","kinds":["אנימציה"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":188,"tc":"49:45","what":"\"הרבי מכנס בדחיפות את כל החסידים באופן יוצא דופן\"","prod":"כל החסידים מתכנסים יחדיו","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":189,"tc":"49:55","what":"הנאום כמקום של ייאוש. \"זה עליכם, אני מרים ידיים\"","prod":"הרבי מכנס את החסידים כשהוא נראה מיואש","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":190,"tc":"50:15","what":"סוף הנאום","prod":"הרבי יורד מהבמה, מאחוריו החסידים, כאילו הוא מפנה את הבמה","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":191,"tc":"50:25","what":"\"כל הסיפור המשיחי נולד בחסות מחלת הרבי\"","prod":"לא ברור. נאמר \"נגמר ב-50:25\" ומיד נשאל \"למה נגמר?\"","kinds":["לא הוכרע"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":192,"tc":"50:49","what":"אחרי כל תפילה הרבי יוצא למרפסת ומעודד את השירה, בראשו, כשידיו כמעט לא זזות. \"כאב לי לראות\"","prod":"הרבי יוצא למרפסת","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":193,"tc":"51:31","what":"\"עד כה 100% מהמשיחים הכזיבו, וגם הרבי הכזיב\". \"חיכה לסימן, ובמקום זה לקה בשבץ\"","prod":"אותו רגע של יציאה למרפסת, אבל בקלוז-אפ","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":194,"tc":"51:41 (תוקן מ-51:49)","what":"\"לקה בעוד שבץ, ובסופו של דבר נפטר\"","prod":"מרפסת ריקה, בלי אף אחד","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":195,"tc":"51:44 עד 51:55","what":"קטע שלא צוין תוכנו","prod":"להוציא","kinds":["חיתוך"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":196,"tc":"מ-51:55","what":"הלוויית הרבי, אנשים והארון. \"יום של ג' תמוז, לא אשכח\"","prod":"אותו פוטג' של ההלוויה בלי הסאונד המקורי, מועבר לאנימציה. בסאונד: אותה מוזיקה, ובמקום הקריינית העדות על ג' תמוז","kinds":["אנימציה","סאונד"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":197,"tc":"לא צוין","what":"\"שמע ישראל, השם אלוקינו, השם אחד\", \"ברוך דיין האמת\"","prod":"ביטוי ויזואלי בכתב, טקסט על המסך, כי המסר נכתב ולא נאמר. עלה שזה הגיע בביפר","kinds":["גרפיקה"],"rights":"","sec":"המשך ב","secspan":"41:18 עד 51:55"},{"n":198,"tc":"51:55","what":"אזור הודעת הפטירה. בפריים יש חדשות בכבלים","prod":"להסיר את חדשות הכבלים מהפריים","kinds":["חיתוך"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":199,"tc":"52:12","what":"הודעת הפטירה. \"השם אלוקינו, השם אחד, ברוך דיין האמת\"","prod":"להעלות את הטקסט על המסך","kinds":["גרפיקה"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":200,"tc":"52:12","what":"יציאה מהמקווה, צופר מחריד \"כמו כניסת שבת\" שנשמע על פני העיירה","prod":"הסאונד כבר מסומן בטיימליין","kinds":["סאונד"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":201,"tc":"52:44","what":"המונים וחסידים סביב הארון של הרבי","prod":"לייצר את הסצנה עם הארון","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":202,"tc":"~52:50","what":"הארון מגיע לחלקת הקבר","prod":"הארון מגיע לחלקת הקבר","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":203,"tc":"~52:55","what":"הסביבה סביב הארון","prod":"זום לאחד החסידים, פנים מקומטות מבכי. \"הצד הארטיסטי שלך\"","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":204,"tc":"~53:00","what":"תגובת הקהל","prod":"חסידים בוכים, לא מייבבים ולא בהיסטריה. בעיקר באלם","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":205,"tc":"~53:00","what":"שאלת הצבע בסצנת הקבורה","prod":"נשאר בצבע, לא עובר לשחור-לבן. מותר לרדת לגוונים של אפור בתוך הצבע","kinds":["סטייל"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":206,"tc":"53:12","what":"איש מחברה קדישא צועק \"רבי, זה הזמן האחרון להתגלות\", ואז \"שמע ישראל\"","prod":"ליפסינג. משתמשים באותו חסיד שכבר נבנה קודם בסרט","kinds":["ליפסינג"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":207,"tc":"54:06","what":"פרשן: \"חב\"ד נגמרה, זאת תנועה שתלך ותדעך בהיעדר מנהיגות\"","prod":"לראות אותו בתוך מסך טלוויזיה, בחור שנראה לא רשמי בסגנון פרופסור, בליפסינג","kinds":["ליפסינג","גרפיקה"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":208,"tc":"~54:20 עד ~55:10","what":"הדיסוננס הקוגניטיבי: המשיח מת, האמונה לא נשברת אלא מוכפלת, יציאה למיסיונריות","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":209,"tc":"~55:12","what":"האב מספר על פרידה מהבת שיצאה לשליחות בשדה התעופה","prod":"נוסף כיתוב (לואר ת'ירד) לדובר","kinds":["גרפיקה"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":210,"tc":"55:28","what":"\"נוסעת למקום, את לא יודעת מי יעזור לך, ואת נוסעת בכזו פשטות, כי זה מה שהרבי רוצה\"","prod":"חבדניקית עולה לכבש המטוס. נכנס בעדיפות נמוכה","kinds":["עדיפות נמוכה","אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":211,"tc":"~55:45","what":"הדלקת נר חנוכה בבתי חב\"ד בעולם","prod":"נשאר פוטג' דוקומנטרי אמיתי. לא לייצר חלופה","kinds":["ארכיון","פוטג' של יגאל"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":212,"tc":"~56:05","what":"\"הרבי בנה את התרחיש העתידי אחרי מותו, וההחלטה לשמר את הרעיון המשיחי\"","prod":"רעיון: הרבי הולך לשקיעה, \"מסמן את הדרך\"","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":213,"tc":"~56:25","what":"חלוקה סוציולוגית פנים חב\"ד: משיחיסטים מול אנטי-משיחיסטים","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":214,"tc":"~56:45","what":"\"מי שמבקר ב-770 מופתע ששגרת היום מתנהלת עם הרבי. שלוש פעמים ביום קוראים לו לתפילה\"","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":215,"tc":"~56:55","what":"הקהל פותח שביל, \"כל העיניים נסובות כלפי מעלה, הרבי אמור לרדת\"","prod":"נשאר דוקומנטרי. נדחתה הצעה לשים את הרבי בשמיים","kinds":["ארכיון","פוטג' של יגאל"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":216,"tc":"~57:05 עד ~57:20","what":"הרבי יורד מהמשרד, \"רבנו מלך המשיח לעולם ועד\"","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":217,"tc":"57:25","what":"חלוקת הדולרים","prod":"לייצר. מתחיל מקלוז-אפ, ואולי אינטרקאט של ידיים מחלקות דולרים","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":218,"tc":"~57:35 עד ~58:00","what":"הדולרים הפכו לאוצר וממשיכים להיות מחולקים היום","prod":"כניסה ל-770, שולחן, ערימת דולרים, \"הרבי מחלק דולרים\" אבל לא רואים אותו. חסידים באים, חלקם נבוכים, חלקם משחקים את המשחק","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":219,"tc":"~58:05 עד ~58:25","what":"מרואיין מזלזל: \"יש כמה משוגעים... כשמחלקים כסף תמיד תמצא משוגעים\"","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":220,"tc":"~58:30","what":"\"חב\"ד והמשיחיסטים הצליחו לייצר אקולוגיה משיחית\". טכנולוגיה מגויסת על ידי הדת","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":221,"tc":"~58:50 עד ~59:30","what":"אגרות קודש: כרכים, מכתבי הרבי, פניות של מצוקה, שידוך, ריפוי, פרנסה","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":222,"tc":"~59:35 עד ~59:45","what":"\"אפשר לראות את הרבי הרבה יותר מאשר בחייו, ולחוש את נוכחותו הקרובה\"","prod":"הועלה: לשים את הרבי כאילו בשמיים, מסתכל על כולם","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":223,"tc":"~59:50 עד ~1:00:55","what":"חתונה בכפר חב\"ד: סרטי וידאו של הרבי במסדרון, מלבישים לחתן את הסרטוק של הרבי, ההינומה של הרבנית, ואז על מסך מטר מהאף של החתן והכלה עולה הרבי ומברך","prod":"לא הוכרע. עלתה שאלת זכויות יוצרים על צילום של מסך שמקרין את הרבי","kinds":["לא הוכרע","לבירור זכויות"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":224,"tc":"~1:01:00 עד ~1:02:20","what":"חב\"ד כזרם רביעי בארה\"ב, מנגנוני תרומות, האופי המבוזר, \"הרבי הניח תשתית שהקיום שלו יהיה נצחי דרכם\"","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":225,"tc":"1:02:45","what":"סוף הבלוק על התשתית הנצחית","prod":"מעבר או מורף מאימג' של הרבי לחסיד","kinds":["אנימציה","AI"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":226,"tc":"~1:02:50 עד ~1:03:10","what":"ראיון עם חסיד צעיר: \"ואתה באמת ובתמים מאמין שהמשיח יגיע הלילה?\"","prod":"לרדת מהסרט","kinds":["חיתוך"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":227,"tc":"1:03:39","what":"תמונה של הרבי שכבר מוכרת","prod":"המון פיקסלים של מאמינים שמתחברים לתמונה אחת, מוזאיקה. חלופה: טופ שוט של החסידים, המצלמה עולה, וזה מתחבר לאימג' של הרבי","kinds":["אנימציה","AI","לבדיקת היתכנות"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":228,"tc":"~1:03:45","what":"\"אז איפה הנבואה? אז איפה ההבטחה?\"","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":229,"tc":"1:04:00","what":"\"אני יכול להביא אתכם עד שפת הארץ המובטחת, להיכנס תצטרכו בכוחות עצמכם\"","prod":"הרבי מסמן את הדרך: הולך בדרך, יוצא למסע, ואומר לחסידים \"עכשיו אתם תיכנסו לארץ\"","kinds":["אנימציה","AI"],"rights":"המימוש של הרעיון מ-56:05. התמונה מוויקיפדיה, אין בעיית זכויות","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":230,"tc":"~1:04:10","what":"\"הרעיון המשיחי הוא לא אדם\"","prod":"לא נדון","kinds":["לא הוכרע"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":231,"tc":"~1:04:25","what":"טראמפ בקבר הרבי","prod":"להשאיר דוקומנטרי","kinds":["ארכיון"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"},{"n":232,"tc":"~1:04:35 עד הסוף","what":"הפסוק החותם על הרעיון המשיחי, ואז \"אמונה זה כמו אופק. אתה חושב שאתה מתקרב, אבל אף פעם אתה לא מגיע\"","prod":"להישאר נאמן לתסריט המקורי. לא לשים את הרבי בשוט הסיום","kinds":["סטייל"],"rights":"","sec":"המשך ג","secspan":"51:55 עד סוף הסרט"}]</script>
+<script>
+(function(){
+"use strict";
+
+var SHOTS = JSON.parse(document.getElementById('data').textContent);
+var TOTAL = SHOTS.length;
+var KEY = 'yigal-shots-priority-v1';
+var LABEL = {must:'חובה', mid:'בינוני', skip:'אפשר לוותר'};
+
+var byN = {};
+var SECTIONS = [];
+var seen = {};
+SHOTS.forEach(function(s){
+  byN[s.n] = s;
+  if(!seen[s.sec]){ seen[s.sec]=1; SECTIONS.push({name:s.sec, span:s.secspan}); }
+});
+
+/* ---------- state ---------- */
+var state = {order: SHOTS.map(function(s){return s.n;}), p:{}, notes:{}, open:{}};
+try{
+  var raw = localStorage.getItem(KEY);
+  if(raw){
+    var st = JSON.parse(raw);
+    if(st && typeof st === 'object'){
+      if(st.p) state.p = st.p;
+      if(st.notes) state.notes = st.notes;
+      if(Array.isArray(st.order)){
+        var ok = [], has = {};
+        st.order.forEach(function(n){ if(byN[n] && !has[n]){ has[n]=1; ok.push(n); } });
+        SHOTS.forEach(function(s){ if(!has[s.n]) ok.push(s.n); });
+        if(ok.length === TOTAL) state.order = ok;
+      }
+    }
+  }
+}catch(e){}
+Object.keys(state.notes).forEach(function(n){ if(state.notes[n]) state.open[n]=1; });
+
+var saveTimer = null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){
+    try{
+      localStorage.setItem(KEY, JSON.stringify({order:state.order, p:state.p, notes:state.notes}));
+      var d = new Date();
+      var hh = ('0'+d.getHours()).slice(-2), mm = ('0'+d.getMinutes()).slice(-2);
+      document.getElementById('saved').textContent = 'נשמר ' + hh + ':' + mm;
+    }catch(e){
+      document.getElementById('saved').textContent = 'השמירה בדפדפן חסומה';
+    }
+  }, 350);
+}
+
+/* ---------- render ---------- */
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+var HEB = /[֐-׿]/;
+var GRIP = '<svg width="12" height="18" viewBox="0 0 12 18" fill="currentColor" aria-hidden="true">'
+  + '<circle cx="3" cy="3" r="1.5"/><circle cx="9" cy="3" r="1.5"/>'
+  + '<circle cx="3" cy="9" r="1.5"/><circle cx="9" cy="9" r="1.5"/>'
+  + '<circle cx="3" cy="15" r="1.5"/><circle cx="9" cy="15" r="1.5"/></svg>';
+
+function rowHTML(s){
+  var p = state.p[s.n] || '';
+  var note = state.notes[s.n] || '';
+  var open = state.open[s.n] ? true : false;
+  var h = '<article class="shot" data-n="'+s.n+'"'+(p ? ' data-p="'+p+'"' : '')+'>';
+  h += '<div class="id"><button class="grip" type="button" title="גרירה לשינוי הסדר בתוך המקטע" aria-label="גרירה לשינוי הסדר של שוט '+s.n+'">'+GRIP+'</button><span class="num">'+s.n+'</span></div>';
+  h += '<div class="body">';
+  h += '<p class="tc" dir="'+(HEB.test(s.tc) ? 'rtl' : 'ltr')+'">'+esc(s.tc)+'</p>';
+  h += '<p class="what">'+esc(s.what)+'</p>';
+  if(s.prod) h += '<p class="prod"><b>מייצרים</b>'+esc(s.prod)+'</p>';
+  if(s.kinds && s.kinds.length){
+    h += '<div class="kinds">';
+    s.kinds.forEach(function(k){ h += '<span class="kind">'+esc(k)+'</span>'; });
+    h += '</div>';
+  }
+  if(s.rights && s.rights.trim()) h += '<p class="rights"><b>זכויות</b><span>'+esc(s.rights)+'</span></p>';
+  h += '</div>';
+  h += '<div class="acts"><div class="pset">'
+    + '<button class="p p-must" type="button" data-set="must" aria-pressed="'+(p==='must')+'">חובה</button>'
+    + '<button class="p p-mid" type="button" data-set="mid" aria-pressed="'+(p==='mid')+'">בינוני</button>'
+    + '<button class="p p-skip" type="button" data-set="skip" aria-pressed="'+(p==='skip')+'">אפשר לוותר</button>'
+    + '</div>'
+    + '<button class="noteBtn" type="button" data-note="1"'+(note?' data-has="1"':'')+'>'+(note ? 'הערה' : 'הוסף הערה')+'</button>'
+    + '</div>';
+  h += '<div class="noteWrap'+(open ? '' : ' hidden')+'"><textarea rows="2" placeholder="הערה על השוט הזה">'+esc(note)+'</textarea></div>';
+  h += '</article>';
+  return h;
+}
+
+function render(){
+  var app = document.getElementById('app');
+  var pos = {};
+  state.order.forEach(function(n,i){ pos[n]=i; });
+  var html = '';
+  SECTIONS.forEach(function(sec){
+    var list = SHOTS.filter(function(s){ return s.sec === sec.name; })
+                    .sort(function(a,b){ return pos[a.n] - pos[b.n]; });
+    html += '<section data-sec="'+esc(sec.name)+'">';
+    html += '<div class="sec-h"><h2>'+esc(sec.name)+'</h2><span class="span">'+esc(sec.span)+'</span><span class="qty">'+list.length+' שוטים</span></div>';
+    html += '<div class="list">';
+    list.forEach(function(s){ html += rowHTML(s); });
+    html += '</div></section>';
+  });
+  app.innerHTML = html;
+  applyFilter();
+  updateCounts();
+}
+
+/* ---------- counts ---------- */
+function updateCounts(){
+  var c = {must:0, mid:0, skip:0};
+  Object.keys(state.p).forEach(function(n){ if(c[state.p[n]] !== undefined) c[state.p[n]]++; });
+  var done = c.must + c.mid + c.skip;
+  document.getElementById('cDone').textContent = done;
+  document.getElementById('cMust').textContent = c.must;
+  document.getElementById('cMid').textContent = c.mid;
+  document.getElementById('cSkip').textContent = c.skip;
+  document.getElementById('mMust').style.width = (c.must/TOTAL*100)+'%';
+  document.getElementById('mMid').style.width = (c.mid/TOTAL*100)+'%';
+  document.getElementById('mSkip').style.width = (c.skip/TOTAL*100)+'%';
+}
+
+/* ---------- filter ---------- */
+var filter = 'all';
+function applyFilter(){
+  var shown = 0;
+  var rows = document.querySelectorAll('.shot');
+  for(var i=0;i<rows.length;i++){
+    var n = rows[i].getAttribute('data-n');
+    var p = state.p[n] || '';
+    var ok = (filter === 'all') || (filter === 'none' ? !p : p === filter);
+    rows[i].classList.toggle('hidden', !ok);
+    if(ok) shown++;
+  }
+  var secs = document.querySelectorAll('#app section');
+  for(var j=0;j<secs.length;j++){
+    var vis = secs[j].querySelectorAll('.shot:not(.hidden)').length;
+    secs[j].classList.toggle('hidden', vis === 0);
+  }
+  document.getElementById('empty').classList.toggle('hidden', shown > 0);
+}
+document.getElementById('filters').addEventListener('click', function(e){
+  var b = e.target.closest('.chip'); if(!b) return;
+  filter = b.getAttribute('data-f');
+  var chips = this.querySelectorAll('.chip');
+  for(var i=0;i<chips.length;i++) chips[i].setAttribute('aria-pressed', String(chips[i] === b));
+  applyFilter();
+});
+
+/* ---------- interactions ---------- */
+var app = document.getElementById('app');
+app.addEventListener('click', function(e){
+  var setBtn = e.target.closest('button[data-set]');
+  if(setBtn){
+    var row = setBtn.closest('.shot');
+    var n = row.getAttribute('data-n');
+    var val = setBtn.getAttribute('data-set');
+    if(state.p[n] === val) delete state.p[n]; else state.p[n] = val;
+    var cur = state.p[n] || '';
+    if(cur) row.setAttribute('data-p', cur); else row.removeAttribute('data-p');
+    var btns = row.querySelectorAll('button[data-set]');
+    for(var i=0;i<btns.length;i++) btns[i].setAttribute('aria-pressed', String(btns[i].getAttribute('data-set') === cur));
+    updateCounts(); save();
+    if(filter !== 'all') applyFilter();
+    return;
+  }
+  var nb = e.target.closest('button[data-note]');
+  if(nb){
+    var r2 = nb.closest('.shot');
+    var n2 = r2.getAttribute('data-n');
+    var wrap = r2.querySelector('.noteWrap');
+    var willOpen = wrap.classList.contains('hidden');
+    wrap.classList.toggle('hidden', !willOpen);
+    state.open[n2] = willOpen ? 1 : 0;
+    if(willOpen) wrap.querySelector('textarea').focus();
+  }
+});
+app.addEventListener('input', function(e){
+  if(e.target.tagName !== 'TEXTAREA') return;
+  var row = e.target.closest('.shot');
+  var n = row.getAttribute('data-n');
+  var v = e.target.value;
+  if(v.trim()) state.notes[n] = v; else delete state.notes[n];
+  var nb = row.querySelector('button[data-note]');
+  if(v.trim()){ nb.setAttribute('data-has','1'); nb.textContent = 'הערה'; }
+  else { nb.removeAttribute('data-has'); nb.textContent = 'הוסף הערה'; }
+  save();
+});
+
+/* ---------- drag to reorder (pointer events, within a section) ---------- */
+var drag = null, rafId = 0;
+
+app.addEventListener('pointerdown', function(e){
+  var grip = e.target.closest('.grip');
+  if(!grip) return;
+  if(e.button !== undefined && e.button > 0) return;
+  e.preventDefault();
+  var row = grip.closest('.shot');
+  var list = row.parentElement;
+  var rect = row.getBoundingClientRect();
+  var ph = document.createElement('div');
+  ph.className = 'placeholder';
+  ph.style.height = rect.height + 'px';
+  list.insertBefore(ph, row);
+  row.classList.add('dragging');
+  row.style.width = rect.width + 'px';
+  row.style.position = 'fixed';
+  row.style.insetInlineStart = 'auto';
+  row.style.left = rect.left + 'px';
+  row.style.top = rect.top + 'px';
+  row.style.margin = '0';
+  row.style.zIndex = '80';
+  drag = {row:row, list:list, ph:ph, dy:e.clientY - rect.top, y:e.clientY, grip:grip, pid:e.pointerId};
+  try{ grip.setPointerCapture(e.pointerId); }catch(err){}
+  document.body.style.userSelect = 'none';
+  window.addEventListener('pointermove', onMove);
+  window.addEventListener('pointerup', onUp);
+  window.addEventListener('pointercancel', onUp);
+  loop();
+});
+
+function onMove(e){
+  if(!drag) return;
+  e.preventDefault();
+  drag.y = e.clientY;
+  position();
+}
+
+function position(){
+  if(!drag) return;
+  drag.row.style.top = (drag.y - drag.dy) + 'px';
+  var kids = drag.list.children, target = null;
+  for(var i=0;i<kids.length;i++){
+    var el = kids[i];
+    if(el === drag.row || el === drag.ph) continue;
+    if(!el.classList.contains('shot') || el.classList.contains('hidden')) continue;
+    var r = el.getBoundingClientRect();
+    if(drag.y < r.top + r.height/2){ target = el; break; }
+  }
+  if(target){ if(drag.ph.nextSibling !== target) drag.list.insertBefore(drag.ph, target); }
+  else { if(drag.list.lastElementChild !== drag.ph) drag.list.appendChild(drag.ph); }
+}
+
+function loop(){
+  if(!drag) return;
+  var pad = 80, sp = 0;
+  if(drag.y < pad) sp = -Math.ceil((pad - drag.y)/6);
+  else if(drag.y > window.innerHeight - pad) sp = Math.ceil((drag.y - (window.innerHeight - pad))/6);
+  if(sp){ window.scrollBy(0, sp); position(); }
+  rafId = requestAnimationFrame(loop);
+}
+
+function onUp(){
+  if(!drag) return;
+  cancelAnimationFrame(rafId);
+  try{ if(drag.grip) drag.grip.releasePointerCapture(drag.pid); }catch(err){}
+  var row = drag.row, ph = drag.ph, list = drag.list;
+  row.classList.remove('dragging');
+  row.style.position = ''; row.style.top = ''; row.style.left = '';
+  row.style.width = ''; row.style.zIndex = ''; row.style.margin = ''; row.style.insetInlineStart = '';
+  list.insertBefore(row, ph);
+  ph.parentNode.removeChild(ph);
+  document.body.style.userSelect = '';
+  window.removeEventListener('pointermove', onMove);
+  window.removeEventListener('pointerup', onUp);
+  window.removeEventListener('pointercancel', onUp);
+  drag = null;
+  var all = document.querySelectorAll('#app .shot');
+  var order = [];
+  for(var i=0;i<all.length;i++) order.push(Number(all[i].getAttribute('data-n')));
+  if(order.length === TOTAL) state.order = order;
+  save();
+}
+
+/* ---------- export ---------- */
+function ordered(){
+  var pos = {};
+  state.order.forEach(function(n,i){ pos[n]=i; });
+  var out = [];
+  SECTIONS.forEach(function(sec){
+    SHOTS.filter(function(s){ return s.sec === sec.name; })
+         .sort(function(a,b){ return pos[a.n] - pos[b.n]; })
+         .forEach(function(s){ out.push(s); });
+  });
+  return out;
+}
+function cell(v){ return '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"'; }
+function buildCSV(){
+  var rows = [['סדר','מספר שוט','טיימקוד','מקטע','טווח המקטע','מה רואים','מה מייצרים','סוג','זכויות','תעדוף','הערה']];
+  ordered().forEach(function(s, i){
+    rows.push([ i+1, s.n, s.tc, s.sec, s.secspan, s.what, s.prod,
+                (s.kinds||[]).join(' / '), s.rights,
+                LABEL[state.p[s.n]] || 'לא סווג', state.notes[s.n] || '' ]);
+  });
+  return '﻿' + rows.map(function(r){ return r.map(cell).join(','); }).join('\r\n');
+}
+function stamp(){
+  var d = new Date();
+  return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2);
+}
+function download(name, text, mime){
+  var blob = new Blob([text], {type: mime});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+}
+function dlCSV(){ download('תעדוף-שוטים-' + stamp() + '.csv', buildCSV(), 'text/csv;charset=utf-8;'); }
+document.getElementById('dlTop').addEventListener('click', dlCSV);
+document.getElementById('dlBottom').addEventListener('click', dlCSV);
+document.getElementById('dlJson').addEventListener('click', function(){
+  var out = ordered().map(function(s, i){
+    return {seq:i+1, n:s.n, tc:s.tc, sec:s.sec, what:s.what, prod:s.prod, kinds:s.kinds,
+            rights:s.rights, priority: state.p[s.n] || null, note: state.notes[s.n] || ''};
+  });
+  download('תעדוף-שוטים-' + stamp() + '.json', JSON.stringify({date:stamp(), shots:out}, null, 2), 'application/json');
+});
+
+document.getElementById('reset').addEventListener('click', function(){
+  if(!confirm('למחוק את כל התעדוף, ההערות והסדר ולהתחיל מחדש?')) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  state.p = {}; state.notes = {}; state.open = {};
+  state.order = SHOTS.map(function(s){ return s.n; });
+  render();
+  document.getElementById('saved').textContent = 'נשמר אוטומטית';
+});
+
+/* ---------- sticky offset ---------- */
+var bar = document.getElementById('bar');
+function barH(){ document.documentElement.style.setProperty('--barH', bar.offsetHeight + 'px'); }
+if(window.ResizeObserver){ new ResizeObserver(barH).observe(bar); } else { window.addEventListener('resize', barH); }
+
+render();
+barH();
+})();
+</script>
+</body>
+</html>
